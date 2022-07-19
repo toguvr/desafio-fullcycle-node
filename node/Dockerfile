@@ -4,6 +4,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+RUN npm i
+
 # prod
 FROM node:15-alpine
 
@@ -13,4 +15,4 @@ COPY --from=builder /usr/src/app .
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+# CMD ["node", "index.js"]
