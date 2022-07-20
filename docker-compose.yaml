@@ -2,30 +2,27 @@ version: "3"
 
 services:
   app:
-    build:
-      context: node
+    build: ./node
+    restart: always
     networks:
       - node-network
+    container_name: api
     tty: true
-    volumes:
-      - ./node:/usr/src/app
-    ports: 
-      - "3000:3000"
-    depends_on: 
+    depends_on:
       - db
 
   nginx:
-      build: 
-          context: ./nginx
-      container_name: nginx
-      networks: 
-          - node-network
-      tty: true
-      ports:
-          - "80:80" 
-      depends_on: 
-          - app
-          - db
+    build:
+      context: ./nginx
+    container_name: nginx
+    networks:
+      - node-network
+    tty: true
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+      - db
 
   db:
     image: mysql:5.7
@@ -33,17 +30,16 @@ services:
     container_name: db
     restart: always
     tty: true
-    volumes: 
+    volumes:
       - ./mysql:/var/lib/mysql
       - ./scripts:/docker-entrypoint-initdb.d
-    ports: 
-      - "3306:3306"  
-    environment: 
+    ports:
+      - "3306:3306"
+    environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
-    networks: 
+    networks:
       - node-network
-
 
 networks:
   node-network:
