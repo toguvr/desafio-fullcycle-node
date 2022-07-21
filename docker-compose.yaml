@@ -4,9 +4,13 @@ services:
   app:
     build: ./node
     restart: always
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    command: node index.js
     networks:
       - node-network
     container_name: api
+    volumes:
+      - /usr/src/app
     tty: true
     depends_on:
       - db
